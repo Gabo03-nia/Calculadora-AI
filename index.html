@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora Avanzada Pro</title>
+    <style>
+        :root {
+            --primary: #6c5ce7;
+            --secondary: #a29bfe;
+            --dark: #2d3436;
+            --light: #f5f6fa;
+            --success: #00b894;
+            --danger: #d63031;
+            --warning: #fdcb6e;
+            --info: #0984e3;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 500px;
+            overflow: hidden;
+        }
+        
+        .header {
+            background-color: var(--primary);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+        
+        .header p {
+            opacity: 0.8;
+            font-size: 0.9rem;
+        }
+        
+        .menu {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            padding: 20px;
+        }
+        
+        .menu button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .menu button:hover {
+            background-color: var(--secondary);
+            transform: translateY(-2px);
+        }
+        
+        .menu button i {
+            font-size: 18px;
+        }
+        
+        .operacion-container {
+            padding: 0 20px;
+        }
+        
+        .operacion-container h3 {
+            color: var(--dark);
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+            border-bottom: 2px solid var(--secondary);
+            padding-bottom: 5px;
+        }
+        
+        .input-group {
+            margin-bottom: 15px;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: var(--dark);
+            font-weight: 500;
+        }
+        
+        .input-group input, .input-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border 0.3s;
+        }
+        
+        .input-group input:focus, .input-group select:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+        
+        .btn-calcular {
+            background-color: var(--success);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            width: 100%;
+            margin-top: 10px;
+            transition: all 0.3s;
+        }
+        
+        .btn-calcular:hover {
+            background-color: #00a884;
+            transform: translateY(-2px);
+        }
+        
+        .resultado {
+            background-color: #f8f9fa;
+            border-radius: 0 0 15px 15px;
+            padding: 20px;
+            display: none;
+        }
+        
+        .resultado h3 {
+            color: var(--primary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .resultado-texto {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .explicacion {
+            font-style: italic;
+            color: #666;
+            border-top: 1px dashed #ccc;
+            padding-top: 10px;
+            line-height: 1.5;
+        }
+        
+        .btn-limpiar {
+            background-color: var(--warning);
+            color: var(--dark);
+            margin-top: 15px;
+        }
+        
+        @media (max-width: 480px) {
+            .menu {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-calculator"></i> Calculadora Pro</h1>
+            <p>Herramienta avanzada con explicaciones matemáticas</p>
+        </div>
+        
+        <div class="menu">
+            <button onclick="mostrarOperacion('suma')"><i class="fas fa-plus"></i> Suma</button>
+            <button onclick="mostrarOperacion('resta')"><i class="fas fa-minus"></i> Resta</button>
+            <button onclick="mostrarOperacion('multiplicacion')"><i class="fas fa-times"></i> Multiplicación</button>
+            <button onclick="mostrarOperacion('division')"><i class="fas fa-divide"></i> División</button>
+            <button onclick="mostrarOperacion('potencia')"><i class="fas fa-caret-up"></i> Potencia</button>
+            <button onclick="mostrarOperacion('raiz')"><i class="fas fa-square-root-alt"></i> Raíz</button>
+            <button onclick="mostrarOperacion('logaritmo')"><i class="fas fa-calculator"></i> Logaritmo</button>
+            <button onclick="mostrarOperacion('trigonometricas')"><i class="fas fa-superscript"></i> Trigonometría</button>
+            <button onclick="mostrarOperacion('ecuacion')"><i class="fas fa-function"></i> Ecuación</button>
+            <button onclick="mostrarOperacion('factorial')"><i class="fas fa-exclamation"></i> Factorial</button>
+            <button onclick="mostrarOperacion('conversion')"><i class="fas fa-exchange-alt"></i> Conversión</button>
+            <button onclick="mostrarOperacion('explicacion')"><i class="fas fa-info-circle"></i> Explicación</button>
+        </div>
+        
+        <div id="operacion-container" class="operacion-container">
+            <div style="text-align: center; color: #666; padding: 20px;">
+                <i class="fas fa-hand-pointer" style="font-size: 24px; margin-bottom: 10px;"></i>
+                <p>Selecciona una operación del menú</p>
+            </div>
+        </div>
+        
+        <div id="resultado" class="resultado">
+            <h3><i class="fas fa-check-circle"></i> Resultado</h3>
+            <p id="resultado-texto" class="resultado-texto"></p>
+            <p id="explicacion" class="explicacion"></p>
+            <button class="btn-calcular btn-limpiar" onclick="limpiarCalculadora()"><i class="fas fa-broom"></i> Limpiar</button>
+        </div>
+    </div>
+
+    <script>
+        // ===== FUNCIÓN PARA MOSTRAR OPERACIONES =====
+        function mostrarOperacion(operacion) {
+            const container = document.getElementById('operacion-container');
+            container.innerHTML = '';
+            document.getElementById('resultado').style.display = 'none';
+            
+            let html = '';
+            
+            switch (operacion) {
+                case 'suma':
+                    html = `
+                        <h3><i class="fas fa-plus"></i> Suma</h3>
+                        <div class="input-group">
+                            <label for="num1">Primer número:</label>
+                            <input type="number" id="num1" placeholder="Ej: 5">
+                        </div>
+                        <div class="input-group">
+                            <label for="num2">Segundo número:</label>
+                            <input type="number" id="num2" placeholder="Ej: 3">
+                        </div>
+                        <button class="btn-calcular" onclick="calcularSuma()"><i class="fas fa-calculator"></i> Calcular</button>
+                    `;
+                    break;
+                    
+                case 'resta':
+                    html = `
+                        <h3><i class="fas fa-minus"></i> Resta</h3>
+                        <div class="input-group">
+                            <label for="num1">Minuendo:</label>
+                            <input type="number" id="num1" placeholder="Ej: 10">
+                        </div>
+                        <div class="input-group">
+                            <label for="num2">Sustraendo:</label>
+                            <input type="number" id="num2" placeholder="Ej: 4">
+                        </div>
+                        <button class="btn-calcular" onclick="calcularResta()"><i class="fas fa-calculator"></i> Calcular</button>
+                    `;
+                    break;
+                    
+                case 'multiplicacion':
+                    html = `
+                        <h3><i class="fas fa-times"></i> Multiplicación</h3>
+                        <div class="input-group">
+                            <label for="num1">Factor 1:</label>
+                            <input type="number" id="num1" placeholder="Ej: 7">
+                        </div>
+                        <div class="input-group">
+                            <label for="num2">Factor 2:</label>
+                            <input type="number" id="num2" placeholder="Ej: 6">
+                        </div>
+                        <button class="btn-calcular" onclick="calcularMultiplicacion()"><i class="fas fa-calculator"></i> Calcular</button>
+                    `;
+                    break;
+                    
+                case 'division':
+                    html = `
+                        <h3><i class="fas fa-divide"></i> División</h3>
+                        <div class="input-group">
+                            <label for="num1">Dividendo:</label>
+                            <input type="number" id="num1" placeholder="Ej: 20">
+                        </div>
+                        <div class="input-group">
+                            <label for="num2">Divisor:</label>
+                            <input type="number" id="num2" placeholder="Ej: 5 (no cero)">
+                        </div>
+                        <button class="btn-calcular" onclick="calcularDivision()"><i class="fas fa-calculator"></i> Calcular</button>
+                    `;
+                    break;
+                    
+                case 'potencia':
+                    html = `
+                        <h3><i class="fas fa-caret-up"></i> Potencia</h3>
+                        <div class="input-group">
+                            <label for="base">Base:</label>
+                            <input type="number" id="base" placeholder="Ej: 2">
+                        </div>
+                        <div class="input-group">
+                            <label for="exponente">Exponente:</label>
+                            <input type="number" id="exponente" placeholder="Ej: 3">
+                        </div>
+                        <button class="btn-calcular" onclick="calcularPotencia()"><i class="fas fa-calculator"></i> Calcular</button>
+                    `;
+                    break;
+                    
+                case 'raiz':
+                    html = `
+                        <h3><i class="fas fa-square-root-alt"></i> Raíz Cuadrada</h3>
+                        <div class="input-group">
+                            <label for="num">Número (≥0):</label>
+                            <input type="number" id="num" placeholder="Ej: 25">
+                        </div>
+                        <button class="btn-calcular" onclick="calcularRaiz()"><i class="fas fa-calculator"></i> Calcular</button>
+                    `;
+                    break;
+                    
+                case 'logaritmo':
+                    html = `
+                        <h3><i class="fas fa-calculator"></i> Logaritmo Natural</h3>
+                        <div class="input-group">
+                            <label for="num">Número (>0):</label>
+                            <input type="number" id="num" placeholder="Ej: 10">
+                        </div>
+                        <button class="btn-calcular" onclick="calcularLogaritmo()"><i class="fas fa-calculator"></i> Calcular</button>
+                    `;
+                    break;
+                    
+                case 'trigonometricas':
+                    html = `
+                        <h3><i class="fas fa-superscript"></i> Funciones Trigonométricas</h3>
+                        <div class="input-group">
+                            <label for="funcion">Función:</label>
+                            <select id="funcion">
+                                <option value="seno">Seno</option>
+                                <option value="coseno">Coseno</option>
+                                <option value="tangente">Tangente</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label for="angulo">Ángulo (grados):</label>
+                            <input type="number" id="angulo" placeholder="Ej: 45">
+                        </div>
+                        <button class="btn-calcular" onclick="calcularTrigonometrica()"><i class="fas fa-calculator"></i> Calcular</button>
+                    `;
+                    break;
+                    
+                case 'ecuacion':
+                    html = `
+                        <h3><i class="fas fa-function"></i> Ecuación Cuadrática</h3>
+                        <div class="input-group">
+                            <label for="a">Coeficiente a:</label>
+                            <input type="number" id="a" placeholder="Ej: 1 (no cero)">
+                        </div>
+                        <div class="input-group">
+                            <label for="b">Coeficiente b:</label>
+                            <input type="number" id="b" placeholder="Ej: -3">
+                        </div>
+                        <div class="input-group">
+                            <label for="c">Coeficiente c:</label>
+                            <input type="number" id="c" placeholder="Ej: 2">
+                        </div>
+                        <button class="btn-calcular" onclick="calcularEcuacion()"><i class="fas fa-calculator"></i> Calcular</button>
+                    `;
+                    break;
+                    
+                case 'factorial':
+                    html = `
+                        <h3><i class="fas fa-exclamation"></i> Factorial</h3>
+                        <div class="input-group">
+                            <label for="num">Número entero (≥0):</label>
+                            <input type="number" id="num" placeholder="Ej: 5">
+                        </div>
+                        <button class="btn-calcular" onclick="calcularFactorial()"><i class="fas fa-calculator"></i> Calcular</button>
+                    `;
+                    break;
+                    
+                case 'conversion':
+                    html = `
+                        <h3><i class="fas fa-exchange-alt"></i> Conversión de Unidades</h3>
+                        <div class="input-group">
+                            <label for="tipoConversion">Tipo:</label>
+                            <select id="tipoConversion">
+                                <option value="celsius-fahrenheit">°C a °F</option>
+                                <option value="fahrenheit-celsius">°F a °C</option>
+                                <option value="km-millas">Kilómetros a Millas</option>
+                                <option value="millas-km">Millas a Kilómetros</option>
+                                <option value="kg-lb">Kilogramos a Libras</option>
+                                <option value="lb-kg">Libras a Kilogramos</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label for="valor">Valor:</label>
+                            <input type="number" id="valor" placeholder="Ej: 100">
+                        </div>
+                        <button class="btn-calcular" onclick="calcularConversion()"><i class="fas fa-calculator"></i> Calcular</button>
+                    `;
+                    break;
+                    
+                case 'explicacion':
+                    html = `
+                        <h3><i class="fas fa-info-circle"></i> Explicación Matemática</h3>
+                        <div class="input-group">
+                            <label for="tema">Tema:</label>
+                            <select id="tema">
+                                <option value="pi">¿Qué es π (pi)?</option>
+                                <option value="e">¿Qué es el número e?</option>
+                                <option value="pitagoras">Teorema de Pitágoras</option>
+                                <option value="derivada">¿Qué es una derivada?</option>
+                                <option value="integral">¿Qué es una integral?</option>
+                            </select>
+                        </div>
+                        <button class="btn-calcular" onclick="mostrarExplicacion()"><i class="fas fa-book"></i> Mostrar Explicación</button>
+                    `;
+                    break;
+            }
+            
+            container.innerHTML = html;
+        }
+        
+        // ===== FUNCIONES DE CÁLCULO =====
+        function mostrarResultado(texto, explicacion = "") {
+            const resultadoDiv = document.getElementById('resultado');
+            document.getElementById('resultado-texto').innerHTML = texto;
+            document.getElementById('explicacion').textContent = explicacion;
+            resultadoDiv.style.display = 'block';
+            resultadoDiv.scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        function calcularSuma() {
+            const num1 = parseFloat(document.getElementById('num1').value) || 0;
+            const num2 = parseFloat(document.getElementById('num2').value) || 0;
+            mostrarResultado(
+                `<b>${num1} + ${num2} = ${(num1 + num2).toLocaleString()}</b>`,
+                "La suma es una operación básica que combina dos cantidades en un valor total."
+            );
+        }
+        
+        function calcularResta() {
+            const num1 = parseFloat(document.getElementById('num1').value) || 0;
+            const num2 = parseFloat(document.getElementById('num2').value) || 0;
+            mostrarResultado(
+                `<b>${num1} - ${num2} = ${(num1 - num2).toLocaleString()}</b>`,
+                "La resta muestra la diferencia entre dos valores (minuendo - sustraendo)."
+            );
+        }
+        
+        function calcularMultiplicacion() {
+            const num1 = parseFloat(document.getElementById('num1').value) || 0;
+            const num2 = parseFloat(document.getElementById('num2').value) || 0;
+            mostrarResultado(
+                `<b>${num1} × ${num2} = ${(num1 * num2).toLocaleString()}</b>`,
+                `La multiplicación es una suma repetida. Equivale a sumar ${num1} un total de ${num2} veces.`
+            );
+        }
+        
+        function calcularDivision() {
+            const num1 = parseFloat(document.getElementById('num1').value) || 0;
+            let num2 = parseFloat(document.getElementById('num2').value) || 1;
+            
+            if (num2 === 0) {
+                mostrarResultado(
+                    `<b style="color: var(--danger);">Error: División por cero</b>`,
+                    "Matemáticamente, no es posible dividir entre cero."
+                );
+                return;
+            }
+            
+            mostrarResultado(
+                `<b>${num1} ÷ ${num2} = ${(num1 / num2).toLocaleString(undefined, { maximumFractionDigits: 4 })}</b>`,
+                `La división representa cuántas veces cabe el divisor (${num2}) en el dividendo (${num1}).`
+            );
+        }
+        
+        function calcularPotencia() {
+            const base = parseFloat(document.getElementById('base').value) || 0;
+            const exponente = parseFloat(document.getElementById('exponente').value) || 0;
+            const resultado = Math.pow(base, exponente);
+            
+            mostrarResultado(
+                `<b>${base}<sup>${exponente}</sup> = ${resultado.toLocaleString()}</b>`,
+                `La potenciación es la operación de multiplicar ${base} por sí mismo ${exponente} veces.`
+            );
+        }
+        
+        function calcularRaiz() {
+            let num = parseFloat(document.getElementById('num').value) || 0;
+            
+            if (num < 0) {
+                mostrarResultado(
+                    `<b style="color: var(--danger);">Error: Número negativo</b>`,
+                    "La raíz cuadrada de números negativos no está definida en los números reales."
+                );
+                return;
+            }
+            
+            const resultado = Math.sqrt(num);
+            mostrarResultado(
+                `<b>√${num} = ${resultado.toLocaleString(undefined, { maximumFractionDigits: 4 })}</b>`,
+                `La raíz cuadrada es el número que multiplicado por sí mismo da ${num}.`
+            );
+        }
+        
+        function calcularLogaritmo() {
+            let num = parseFloat(document.getElementById('num').value) || 0;
+            
+            if (num <= 0) {
+                mostrarResultado(
+                    `<b style="color: var(--danger);">Error: Número inválido</b>`,
+                    "El logaritmo natural solo está definido para números positivos."
+                );
+                return;
+            }
+            
+            const resultado = Math.log(num);
+            mostrarResultado(
+                `<b>ln(${num}) = ${resultado.toLocaleString(undefined, { maximumFractionDigits: 4 })}</b>`,
+                `El logaritmo natural es el exponente al que hay que elevar 'e' (≈2.71828) para obtener ${num}.`
+            );
+        }
+        
+        function calcularTrigonometrica() {
+            const funcion = document.getElementById('funcion').value;
+            const angulo = parseFloat(document.getElementById('angulo').value) || 0;
+            const radianes = angulo * Math.PI / 180;
+            let resultado, nombreFuncion, explicacion;
+            
+            switch(funcion) {
+                case 'seno':
+                    resultado = Math.sin(radianes);
+                    nombreFuncion = "seno";
+                    explicacion = `El seno de ${angulo}° en un triángulo rectángulo es la razón entre el cateto opuesto y la hipotenusa.`;
+                    break;
+                case 'coseno':
+                    resultado = Math.cos(radianes);
+                    nombreFuncion = "coseno";
+                    explicacion = `El coseno de ${angulo}° en un triángulo rectángulo es la razón entre el cateto adyacente y la hipotenusa.`;
+                    break;
+                case 'tangente':
+                    resultado = Math.tan(radianes);
+                    nombreFuncion = "tangente";
+                    explicacion = `La tangente de ${angulo}° en un triángulo rectángulo es la razón entre el cateto opuesto y el cateto adyacente.`;
+                    break;
+            }
+            
+            mostrarResultado(
+                `<b>${nombreFuncion}(${angulo}°) = ${resultado.toLocaleString(undefined, { maximumFractionDigits: 4 })}</b>`,
+                explicacion
+            );
+        }
+        
+        function calcularEcuacion() {
+            const a = parseFloat(document.getElementById('a').value) || 0;
+            const b = parseFloat(document.getElementById('b').value) || 0;
+            const c = parseFloat(document.getElementById('c').value) || 0;
+            
+            if (a === 0) {
+                mostrarResultado(
+                    `<b style="color: var(--danger);">Error: Coeficiente 'a' no puede ser cero</b>`,
+                    "Para que sea una ecuación cuadrática, el coeficiente 'a' debe ser diferente de cero."
+                );
+                return;
+            }
+            
+            const discriminante = b * b - 4 * a * c;
+            let solucion = "";
+            
+            if (discriminante > 0) {
+                const x1 = (-b + Math.sqrt(discriminante)) / (2 * a);
+                const x2 = (-b - Math.sqrt(discriminante)) / (2 * a);
+                solucion = `<b>Dos soluciones reales:</b><br>
+                            x₁ = ${x1.toLocaleString(undefined, { maximumFractionDigits: 4 })}<br>
+                            x₂ = ${x2.toLocaleString(undefined, { maximumFractionDigits: 4 })}`;
+            } else if (discriminante === 0) {
+                const x = -b / (2 * a);
+                solucion = `<b>Una solución real (doble):</b><br>
+                            x = ${x.toLocaleString(undefined, { maximumFractionDigits: 4 })}`;
+            } else {
+                const real = -b / (2 * a);
+                const imaginaria = Math.sqrt(-discriminante) / (2 * a);
+                solucion = `<b>Dos soluciones complejas:</b><br>
+                            x₁ = ${real.toLocaleString(undefined, { maximumFractionDigits: 4 })} + ${imaginaria.toLocaleString(undefined, { maximumFractionDigits: 4 })}i<br>
+                            x₂ = ${real.toLocaleString(undefined, { maximumFractionDigits: 4 })} - ${imaginaria.toLocaleString(undefined, { maximumFractionDigits: 4 })}i`;
+            }
+            
+            mostrarResultado(
+                solucion,
+                `Solución de la ecuación: ${a}x² ${b < 0 ? '-' : '+'} ${Math.abs(b)}x ${c < 0 ? '-' : '+'} ${Math.abs(c)} = 0<br>
+                 Fórmula cuadrática: x = [-b ± √(b²-4ac)]/2a`
+            );
+        }
+        
+        function calcularFactorial() {
+            let num = parseInt(document.getElementById('num').value) || 0;
+            
+            if (num < 0) {
+                mostrarResultado(
+                    `<b style="color: var(--danger);">Error: Número negativo</b>`,
+                    "El factorial solo está definido para números enteros no negativos."
+                );
+                return;
+            }
+            
+            let resultado = 1;
+            for (let i = 2; i <= num; i++) {
+                resultado *= i;
+            }
+            
+            mostrarResultado(
+                `<b>${num}! = ${resultado.toLocaleString()}</b>`,
+                `El factorial de ${num} es el producto de todos los números enteros positivos desde 1 hasta ${num}.`
+            );
+        }
+        
+        function calcularConversion() {
+            const tipo = document.getElementById('tipoConversion').value;
+            const valor = parseFloat(document.getElementById('valor').value) || 0;
+            let resultado, desde, hacia, explicacion;
+            
+            switch(tipo) {
+                case 'celsius-fahrenheit':
+                    resultado = (valor * 9/5) + 32;
+                    desde = "°C";
+                    hacia = "°F";
+                    explicacion = "Fórmula: °F = (°C × 9/5) + 32";
+                    break;
+                case 'fahrenheit-celsius':
+                    resultado = (valor - 32) * 5/9;
+                    desde = "°F";
+                    hacia = "°C";
+                    explicacion = "Fórmula: °C = (°F - 32) × 5/9";
+                    break;
+                case 'km-millas':
+                    resultado = valor * 0.621371;
+                    desde = "km";
+                    hacia = "millas";
+                    explicacion = "1 kilómetro ≈ 0.621371 millas";
+                    break;
+                case 'millas-km':
+                    resultado = valor * 1.60934;
+                    desde = "millas";
+                    hacia = "km";
+                    explicacion = "1 milla ≈ 1.60934 kilómetros";
+                    break;
+                case 'kg-lb':
+                    resultado = valor * 2.20462;
+                    desde = "kg";
+                    hacia = "lb";
+                    explicacion = "1 kilogramo ≈ 2.20462 libras";
+                    break;
+                case 'lb-kg':
+                    resultado = valor * 0.453592;
+                    desde = "lb";
+                    hacia = "kg";
+                    explicacion = "1 libra ≈ 0.453592 kilogramos";
+                    break;
+            }
+            
+            mostrarResultado(
+                `<b>${valor.toLocaleString()} ${desde} = ${resultado.toLocaleString(undefined, { maximumFractionDigits: 2 })} ${hacia}</b>`,
+                explicacion
+            );
+        }
+        
+        function mostrarExplicacion() {
+            const tema = document.getElementById('tema').value;
+            let titulo, texto;
+            
+            switch(tema) {
+                case 'pi':
+                    titulo = "¿Qué es π (pi)?";
+                    texto = "π (pi) es la relación entre la circunferencia de un círculo y su diámetro. Es un número irracional (aproximadamente 3.14159) que aparece en muchas fórmulas matemáticas y físicas. Es fundamental en geometría, trigonometría y análisis matemático.";
+                    break;
+                case 'e':
+                    titulo = "¿Qué es el número e?";
+                    texto = "El número e (≈2.71828) es la base de los logaritmos naturales. Es importante en cálculo por ser la única función exponencial cuya derivada es igual a sí misma. Aparece en crecimiento exponencial, interés compuesto, ecuaciones diferenciales y muchos fenómenos naturales.";
+                    break;
+                case 'pitagoras':
+                    titulo = "Teorema de Pitágoras";
+                    texto = "En todo triángulo rectángulo, el cuadrado de la hipotenusa es igual a la suma de los cuadrados de los catetos. Fórmula: a² + b² = c². Es fundamental en geometría euclidiana y tiene aplicaciones en física, ingeniería y navegación.";
+                    break;
+                case 'derivada':
+                    titulo = "¿Qué es una derivada?";
+                    texto = "En cálculo, la derivada representa la tasa de cambio instantánea de una función respecto a una variable. Geométricamente, es la pendiente de la recta tangente a la curva en un punto. Físicamente, puede representar velocidad (derivada de posición) o aceleración (derivada de velocidad).";
+                    break;
+                case 'integral':
+                    titulo = "¿Qué es una integral?";
+                    texto = "La integral es el concepto inverso de la derivada. Mientras la derivada representa una tasa de cambio, la integral acumula valores. Geométricamente, puede representar el área bajo una curva. Es fundamental para calcular áreas, volúmenes, trabajo, probabilidades y muchos otros conceptos en física e ingeniería.";
+                    break;
+            }
+            
+            mostrarResultado(
+                `<b style="color: var(--info);">${titulo}</b><br>${texto}`,
+                ""
+            );
+        }
+        
+        function limpiarCalculadora() {
+            document.getElementById('operacion-container').innerHTML = `
+                <div style="text-align: center; color: #666; padding: 20px;">
+                    <i class="fas fa-hand-pointer" style="font-size: 24px; margin-bottom: 10px;"></i>
+                    <p>Selecciona una operación del menú</p>
+                </div>
+            `;
+            document.getElementById('resultado').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
