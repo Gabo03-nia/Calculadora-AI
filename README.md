@@ -1,7 +1,5 @@
 # 🧮 Calculadora Avanzada con IA
 
-![Calculadora Preview](https://ejemplo.com/preview.jpg) *(Reemplaza con una imagen real de tu proyecto)*
-
 Una calculadora web interactiva con operaciones matemáticas avanzadas, explicaciones didácticas y diseño responsive.
 
 ## 🌟 Características
@@ -18,9 +16,5 @@ Una calculadora web interactiva con operaciones matemáticas avanzadas, explicac
 - **Interfaz intuitiva** con iconos y animaciones
 
 ## 🚀 Cómo Usar
-1. **Accede online**: [https://tucalculadora.netlify.app](https://tucalculadora.netlify.app) *(Reemplaza con tu URL)*
-2. **Localmente**:
-   ```bash
-   git clone https://github.com/tuusuario/calculadora-avanzada.git
-   cd calculadora-avanzada
-   open index.html
+1. **Accede desde aqui**
+2. https://github.com/Gabo03-nia/Calculadora-AI.git
